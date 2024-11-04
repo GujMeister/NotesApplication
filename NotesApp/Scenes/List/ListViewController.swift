@@ -129,8 +129,6 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
         navigationController?.pushViewController(editorVC, animated: true)
     }
     
-    
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UIScreen.main.bounds.height * 0.12
     }
