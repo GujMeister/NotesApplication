@@ -11,19 +11,30 @@ protocol AddNoteDelegate: AnyObject {
     func didAddNote()
 }
 
-class EditorViewController: UIViewController {
+final class EditorViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: EditorViewModel
     weak var delegate: AddNoteDelegate?
 
-    private lazy var customBackButton = CustomBackButton(
-        iconName: "chevron.left",
-        pointSize: 20,
-        backgroundColor: .darkGray,
-        tintColor: .white,
-        cornerRadius: 14,
-        size: 48
-    )
+    // MARK: - Components
+    private lazy var customBackButton: UIButton = {
+        let button = CustomBackButton(
+            iconName: "chevron.left",
+            pointSize: 20,
+            backgroundColor: .darkGray,
+            tintColor: .white,
+            cornerRadius: 14,
+            size: 48
+        )
+        
+        button.addAction(UIAction(handler: { [weak self] _ in
+            self?.backButtonTapped()
+        }), for: .touchUpInside)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
     
     private lazy var titleTextView: UITextView = {
         let textView = UITextView()
@@ -31,7 +42,6 @@ class EditorViewController: UIViewController {
         textView.textColor = .white
         textView.backgroundColor = .clear
         textView.delegate = self
-        textView.isEditable = true
         textView.isScrollEnabled = false
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
@@ -43,7 +53,6 @@ class EditorViewController: UIViewController {
         textView.textColor = .white
         textView.backgroundColor = .clear
         textView.delegate = self
-        textView.isEditable = true
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
@@ -80,42 +89,31 @@ class EditorViewController: UIViewController {
     private func setupUI() {
         view.backgroundColor = UIColor(hex: "#252525")
         
-        setupCustomBackButton()
-        
         titleTextView.addDoneButtonToolbar()
         bodyTextView.addDoneButtonToolbar(onDone: (target: self, action: #selector(customDoneAction)))
         
         view.addSubview(titleTextView)
         view.addSubview(bodyTextView)
-        
-        titleTextView.translatesAutoresizingMaskIntoConstraints = false
-        bodyTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            titleTextView.topAnchor.constraint(equalTo: customBackButton.bottomAnchor, constant: 20),
-            titleTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            titleTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            bodyTextView.topAnchor.constraint(equalTo: titleTextView.bottomAnchor, constant: 10),
-            bodyTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            bodyTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            bodyTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 20)
-        ])
-    }
-
-    private func setupCustomBackButton() {
-        customBackButton.addAction(UIAction(handler: { [weak self] _ in
-            self?.backButtonTapped()
-        }), for: .touchUpInside)
         view.addSubview(customBackButton)
         
-        customBackButton.translatesAutoresizingMaskIntoConstraints = false
-        
+        setupHierarchy()
+    }
+    
+    private func setupHierarchy() {
         NSLayoutConstraint.activate([
-            customBackButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            customBackButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
-            customBackButton.widthAnchor.constraint(equalToConstant: 48),
-            customBackButton.heightAnchor.constraint(equalToConstant: 48),
+            titleTextView.topAnchor.constraint(equalTo: customBackButton.bottomAnchor, constant: EditorViewControllerConstraints.titleTextViewTop),
+            titleTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: EditorViewControllerConstraints.titleTextViewLeading),
+            titleTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: EditorViewControllerConstraints.titleTextViewTrailing),
+            
+            bodyTextView.topAnchor.constraint(equalTo: titleTextView.bottomAnchor, constant: EditorViewControllerConstraints.bodyTextViewTop),
+            bodyTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: EditorViewControllerConstraints.bodyTextViewLeading),
+            bodyTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: EditorViewControllerConstraints.bodyTextViewTrailing),
+            bodyTextView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: EditorViewControllerConstraints.bodyTextViewBottom),
+            
+            customBackButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: EditorViewControllerConstraints.customBackButtonLeading),
+            customBackButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: EditorViewControllerConstraints.customBackButtonTop),
+            customBackButton.widthAnchor.constraint(equalToConstant: EditorViewControllerConstraints.customBackButtonSize),
+            customBackButton.heightAnchor.constraint(equalToConstant: EditorViewControllerConstraints.customBackButtonSize)
         ])
     }
     

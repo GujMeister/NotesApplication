@@ -15,6 +15,10 @@ final class ListViewModel {
         }
     }
     
+    var noteCount: Int {
+        notes.count
+    }
+    
     var onNotesUpdated: (() -> Void)?
     
     // MARK: - Lifecycle
@@ -43,16 +47,11 @@ final class ListViewModel {
         fetchNotes()
     }
     
-    func noteCount() -> Int {
-        return notes.count
-    }
-    
     func note(at index: Int) -> Note {
         let noteModel = notes[index]
         return Note(title: noteModel.title, body: noteModel.body)
     }
     
-    //For editor ;)
     func coreNote(at index: Int) -> NoteModel {
         return notes[index]
     }
