@@ -66,6 +66,10 @@ final class ListViewController: UIViewController {
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        setupHierarchy()
+    }
+    
+    private func setupHierarchy() {
         NSLayoutConstraint.activate([
             notesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
             notesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
@@ -79,7 +83,6 @@ final class ListViewController: UIViewController {
             addNoteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -25)
         ])
     }
-    
     // MARK: - Bindings
     private func setupBindings() {
         viewModel.onNotesUpdated = { [weak self] in
@@ -89,8 +92,8 @@ final class ListViewController: UIViewController {
     
     // MARK: - Button Actions
     private func pushAddNoteViewController() {
-        let editorVM = EditorViewModel(note: nil)
-        let editorVC = EditorViewController(viewModel: editorVM)
+        let editorViewModel = EditorViewModel(note: nil)
+        let editorVC = EditorViewController(viewModel: editorViewModel)
         editorVC.delegate = self
         self.navigationController?.pushViewController(editorVC, animated: true)
     }
