@@ -19,12 +19,12 @@ final class EditorViewController: UIViewController {
     // MARK: - Components
     private lazy var customBackButton: UIButton = {
         let button = CustomBackButton(
-            iconName: "chevron.left",
-            pointSize: 20,
-            backgroundColor: .darkGray,
-            tintColor: .white,
-            cornerRadius: 14,
-            size: 48
+            iconName: EditorViewControllerConstants.customBackButtonIconName,
+            pointSize: EditorViewControllerConstants.customBackButtonPointSize,
+            backgroundColor: EditorViewControllerConstants.customBackButtonBackgroundColor,
+            tintColor: EditorViewControllerConstants.customBackButtonTintColor,
+            cornerRadius: EditorViewControllerConstants.customBackButtonCornerRadius,
+            size: EditorViewControllerConstants.customBackButtonSize
         )
         
         button.addAction(UIAction(handler: { [weak self] _ in

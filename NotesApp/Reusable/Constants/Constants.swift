@@ -35,6 +35,15 @@ public enum ListViewControllerConstants {
     static let addNoteButtonSize: CGFloat = UIScreen.main.bounds.height * 0.08
 }
 
+public enum EditorViewControllerConstants {
+    static let customBackButtonIconName: String = "chevron.left"
+    static let customBackButtonPointSize: CGFloat = 20
+    static let customBackButtonBackgroundColor: UIColor = .darkGray
+    static let customBackButtonTintColor: UIColor = .white
+    static let customBackButtonCornerRadius: CGFloat = 14
+    static let customBackButtonSize: CGFloat = 48
+}
+
 public enum CustomBackButtonConstants {
     static let shadowColor: CGColor = UIColor.black.cgColor
     static let shadowOffset: CGSize = CGSize(width: 0, height: 4)
