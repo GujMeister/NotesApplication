@@ -92,10 +92,10 @@ final class CustomAlertView: UIView {
         containerView.addSubview(cancelButton)
         containerView.addSubview(deleteButton)
         
-        setupHierarchy()
+        setupConstraints()
     }
     
-    private func setupHierarchy() {
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
