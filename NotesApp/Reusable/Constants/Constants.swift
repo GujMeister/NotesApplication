@@ -14,10 +14,10 @@ public enum RoundedButtonConstants {
     static let defaultTintColor: UIColor = .white
     static let defaultCornerRadius: CGFloat = 25
     static let defaultSize: CGFloat = 70
-    static let shadowColor: CGColor = UIColor.black.cgColor
-    static let shadowOffset: CGSize = CGSize(width: 0, height: 4)
-    static let shadowOpacity: Float = 0.3
-    static let shadowRadius: CGFloat = 6
+    static let shadowColor: CGColor = UIColor.white.cgColor
+    static let shadowOffset: CGSize = CGSize(width: 10, height: 10)
+    static let shadowOpacity: Float = 1
+    static let shadowRadius: CGFloat = 40
 }
 
 public enum CustomAlertViewConstants {
@@ -27,6 +27,12 @@ public enum CustomAlertViewConstants {
 
 public enum ListViewControllerConstants {
     static let tableViewCellDistance: CGFloat = 10
+    static let addNoteButtonIconName: String = "plus"
+    static let addNoteButtonPointSize: CGFloat = UIScreen.main.bounds.height * 0.03
+    static let addNoteButtonBackground: UIColor = UIColor(hex: "#252525")
+    static let addNoteButtonTintColor: UIColor = .white
+    static let addNoteButtonCornerRadius: CGFloat = 35
+    static let addNoteButtonSize: CGFloat = UIScreen.main.bounds.height * 0.08
 }
 
 public enum CustomBackButtonConstants {

@@ -31,12 +31,12 @@ final class ListViewController: UIViewController {
     
     private lazy var addNoteButton: RoundedIconButton = {
         let button = RoundedIconButton(
-            iconName: "plus",
-            pointSize: UIScreen.main.bounds.height * 0.03,
-            backgroundColor: UIColor(hex: "#252525"),
-            tintColor: .white,
-            cornerRadius: 35,
-            size: UIScreen.main.bounds.height * 0.08
+            iconName: ListViewControllerConstants.addNoteButtonIconName,
+            pointSize: ListViewControllerConstants.addNoteButtonPointSize,
+            backgroundColor: ListViewControllerConstants.addNoteButtonBackground,
+            tintColor: ListViewControllerConstants.addNoteButtonTintColor,
+            cornerRadius: ListViewControllerConstants.addNoteButtonCornerRadius,
+            size: ListViewControllerConstants.addNoteButtonSize
         )
         
         button.addAction(UIAction(handler: { [weak self] _ in
@@ -90,7 +90,7 @@ final class ListViewController: UIViewController {
             addNoteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: ListViewControllerConstraints.addNoteButtonBottom)
         ])
     }
-
+    
     // MARK: - Bindings
     private func setupBindings() {
         viewModel.onNotesUpdated = { [weak self] in
@@ -112,7 +112,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.noteCount
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NotesCellTableViewCell.reuseIdentifier, for: indexPath) as! NotesCellTableViewCell
         let note = viewModel.note(at: indexPath.row)
@@ -125,7 +125,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         return ListViewControllerConstraints.tableViewCellDistance
     }
-
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }

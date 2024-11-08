@@ -35,12 +35,12 @@ final class RoundedIconButton: UIButton {
         size: CGFloat
     ) {
         configureUI(
-        iconName: iconName, 
-        pointSize: pointSize, 
-        backgroundColor: backgroundColor,
-         tintColor: tintColor,
-          cornerRadius: cornerRadius
-          )
+            iconName: iconName,
+            pointSize: pointSize,
+            backgroundColor: backgroundColor,
+            tintColor: tintColor,
+            cornerRadius: cornerRadius
+        )
         setupConstraints(size: size)
     }
     
@@ -58,7 +58,7 @@ final class RoundedIconButton: UIButton {
         self.backgroundColor = backgroundColor
         self.tintColor = tintColor
         layer.cornerRadius = cornerRadius
-        clipsToBounds = true
+        self.clipsToBounds = true
         
         layer.shadowColor = RoundedButtonConstants.shadowColor
         layer.shadowOffset = RoundedButtonConstants.shadowOffset
