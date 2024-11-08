@@ -91,15 +91,18 @@ final class EditorViewController: UIViewController {
         
         titleTextView.addDoneButtonToolbar()
         bodyTextView.addDoneButtonToolbar(onDone: (target: self, action: #selector(customDoneAction)))
-        
-        view.addSubview(titleTextView)
-        view.addSubview(bodyTextView)
-        view.addSubview(customBackButton)
-        
+
         setupHierarchy()
+        setupConstraints()
     }
     
     private func setupHierarchy() {
+        view.addSubview(titleTextView)
+        view.addSubview(bodyTextView)
+        view.addSubview(customBackButton)
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             titleTextView.topAnchor.constraint(equalTo: customBackButton.bottomAnchor, constant: EditorViewControllerConstraints.titleTextViewTop),
             titleTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: EditorViewControllerConstraints.titleTextViewLeading),
