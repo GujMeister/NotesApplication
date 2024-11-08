@@ -16,10 +16,12 @@ final class NotesCellTableViewCell: UITableViewCell {
     static let reuseIdentifier = "NotesCellTableViewCell"
     weak var delegate: NotesCellTableViewCellDelegate?
     
+    
     lazy var customBackgroundView: UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = CustomAlertViewConstants.cornerRadius
         view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = UIColor(hex: "#FFF599")
         return view
     }()
@@ -28,6 +30,7 @@ final class NotesCellTableViewCell: UITableViewCell {
         let label = UILabel()
         label.font = UIFont(name: "Nunito-Regular", size: 22)
         label.numberOfLines = 2
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -38,7 +41,8 @@ final class NotesCellTableViewCell: UITableViewCell {
         button.setImage(trashIcon, for: .normal)
         button.tintColor = .white
         button.backgroundColor = .darkGray
-        button.layer.cornerRadius = 12
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.cornerRadius = CustomAlertViewConstants.cornerRadius
         button.clipsToBounds = true
         
         button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
@@ -60,32 +64,36 @@ final class NotesCellTableViewCell: UITableViewCell {
         contentView.addSubview(customBackgroundView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(deleteButton)
-        setupConstraints()
+        setupCell()
     }
     
     // MARK: - UI Setup
-    private func setupConstraints() {
-        customBackgroundView.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
+    private func setupCell() {
+        self.backgroundColor = .clear
+        self.selectionStyle = .none
 
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             customBackgroundView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             customBackgroundView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            customBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
-            customBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+            customBackgroundView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: NotesCellConstraints.customBackgroundViewTop),
+            customBackgroundView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: NotesCellConstraints.customBackgroundViewBottom),
             
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 23),
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 19),
-            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -19),
-            titleLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -8),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: NotesCellConstraints.titleLabelLeading),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: NotesCellConstraints.titleLabelTop),
+            titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: NotesCellConstraints.titleLabelBottom),
+            titleLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: NotesCellConstraints.titleLabelToDeleteButtonSpacing),
             
-            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -7),
-            deleteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -12),
-            deleteButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.038),
-            deleteButton.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.038)
+            deleteButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: NotesCellConstraints.deleteButtonTrailing),
+            deleteButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: NotesCellConstraints.deleteButtonBottom),
+            deleteButton.widthAnchor.constraint(equalToConstant: NotesCellConstraints.deleteButtonSize),
+            deleteButton.heightAnchor.constraint(equalToConstant: NotesCellConstraints.deleteButtonSize)
         ])
     }
+
     
     func configure(with note: Note) {
         titleLabel.text = note.title

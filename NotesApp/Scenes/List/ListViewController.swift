@@ -13,7 +13,7 @@ final class ListViewController: UIViewController {
     
     private let notesLabel: UILabel = {
         let label = UILabel()
-        label.text = "Notes"
+        label.text = ListViewControllerTexts.noteText
         label.font = UIFont(name: "Nunito-SemiBold", size: 43)
         label.textColor = .white
         return label
@@ -30,7 +30,14 @@ final class ListViewController: UIViewController {
     }()
     
     private lazy var addNoteButton: RoundedIconButton = {
-        let button = RoundedIconButton(iconName: "plus", pointSize: UIScreen.main.bounds.height * 0.03, backgroundColor: UIColor(hex: "#252525"), tintColor: .white, cornerRadius: 35, size: UIScreen.main.bounds.height * 0.08)
+        let button = RoundedIconButton(
+            iconName: ListViewControllerConstants.addNoteButtonIconName,
+            pointSize: ListViewControllerConstants.addNoteButtonPointSize,
+            backgroundColor: ListViewControllerConstants.addNoteButtonBackground,
+            tintColor: ListViewControllerConstants.addNoteButtonTintColor,
+            cornerRadius: ListViewControllerConstants.addNoteButtonCornerRadius,
+            size: ListViewControllerConstants.addNoteButtonSize
+        )
         
         button.addAction(UIAction(handler: { [weak self] _ in
             self?.pushAddNoteViewController()
@@ -66,17 +73,21 @@ final class ListViewController: UIViewController {
             subview.translatesAutoresizingMaskIntoConstraints = false
         }
         
+        setupHierarchy()
+    }
+    
+    private func setupHierarchy() {
         NSLayoutConstraint.activate([
-            notesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            notesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 60),
+            notesLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ListViewControllerConstraints.notesLabelLeading),
+            notesLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: ListViewControllerConstraints.notesLabelTop),
             
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            tableView.topAnchor.constraint(equalTo: notesLabel.bottomAnchor, constant: -10),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ListViewControllerConstraints.tableViewLeading),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ListViewControllerConstraints.tableViewTrailing),
+            tableView.topAnchor.constraint(equalTo: notesLabel.bottomAnchor, constant: ListViewControllerConstraints.tableViewTopOffset),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             
-            addNoteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -25),
-            addNoteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -25)
+            addNoteButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: ListViewControllerConstraints.addNoteButtonTrailing),
+            addNoteButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: ListViewControllerConstraints.addNoteButtonBottom)
         ])
     }
     
@@ -89,8 +100,8 @@ final class ListViewController: UIViewController {
     
     // MARK: - Button Actions
     private func pushAddNoteViewController() {
-        let editorVM = EditorViewModel(note: nil)
-        let editorVC = EditorViewController(viewModel: editorVM)
+        let editorViewModel = EditorViewModel(note: nil)
+        let editorVC = EditorViewController(viewModel: editorViewModel)
         editorVC.delegate = self
         self.navigationController?.pushViewController(editorVC, animated: true)
     }
@@ -99,24 +110,22 @@ final class ListViewController: UIViewController {
 // MARK: - Table View
 extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.noteCount()
+        return viewModel.noteCount
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NotesCellTableViewCell.reuseIdentifier, for: indexPath) as! NotesCellTableViewCell
         let note = viewModel.note(at: indexPath.row)
         cell.configure(with: note)
-        cell.backgroundColor = .clear
-        cell.selectionStyle = .none
         cell.delegate = self
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 10
+        return ListViewControllerConstraints.tableViewCellDistance
     }
-
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return UIView()
     }
@@ -130,7 +139,7 @@ extension ListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height * 0.12
+        return ListViewControllerConstraints.tableViewCellHeight
     }
 }
 
@@ -142,7 +151,7 @@ extension ListViewController: AddNoteDelegate {
     }
 }
 
-//MARK: Delete Note Delegate
+// MARK: Delete Note Delegate
 extension ListViewController: NotesCellTableViewCellDelegate {
     func didTapDeleteButton(on cell: NotesCellTableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
@@ -158,11 +167,15 @@ extension ListViewController: NotesCellTableViewCellDelegate {
         customAlert.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(customAlert)
         
+        setupConstraints(for: customAlert, on: view)
+    }
+    
+    private func setupConstraints(for view: UIView, on containerView: UIView) {
         NSLayoutConstraint.activate([
-            customAlert.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            customAlert.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            customAlert.topAnchor.constraint(equalTo: view.topAnchor),
-            customAlert.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
     }
 }

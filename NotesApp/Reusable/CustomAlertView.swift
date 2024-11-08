@@ -15,7 +15,7 @@ final class CustomAlertView: UIView {
     private lazy var containerView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor(hex: "#252525")
-        view.layer.cornerRadius = 12
+        view.layer.cornerRadius = CustomAlertViewConstants.cornerRadius
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -32,10 +32,10 @@ final class CustomAlertView: UIView {
     
     private lazy var messageLabel: UILabel = {
         let label = UILabel()
-        label.text = "Are you sure you want to\ndelete this note?"
+        label.text = CustomAlertViewTexts.messageLabelText
         label.font = UIFont(name: "Nunito-Regular", size: 20)
         label.textColor = UIColor(hex: "#CFCFCF")
-        label.numberOfLines = 0
+        label.numberOfLines = .zero
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -46,7 +46,7 @@ final class CustomAlertView: UIView {
         button.setTitle("Cancel", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(hex: "#30BE71")
-        button.layer.cornerRadius = 6
+        button.layer.cornerRadius = CustomAlertViewConstants.secondaryCornerRadius
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addAction(UIAction(handler: { [weak self] _ in
             self?.cancelButtonTapped()
@@ -59,11 +59,13 @@ final class CustomAlertView: UIView {
         button.setTitle("Delete", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = UIColor(hex: "#FF0000")
-        button.layer.cornerRadius = 6
+        button.layer.cornerRadius = CustomAlertViewConstants.secondaryCornerRadius
         button.translatesAutoresizingMaskIntoConstraints = false
+        
         button.addAction(UIAction(handler: { [weak self] _ in
             self?.deleteButtonTapped()
         }), for: .touchUpInside)
+        
         return button
     }()
     
@@ -90,30 +92,34 @@ final class CustomAlertView: UIView {
         containerView.addSubview(cancelButton)
         containerView.addSubview(deleteButton)
         
+        setupConstraints()
+    }
+    
+    private func setupConstraints() {
         NSLayoutConstraint.activate([
             containerView.centerXAnchor.constraint(equalTo: centerXAnchor),
             containerView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            containerView.widthAnchor.constraint(equalToConstant: 330),
+            containerView.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * CustomAlertConstraints.containerViewWidthMultiplier),
             
-            infoImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20),
+            infoImageView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: CustomAlertConstraints.infoImageViewTop),
             infoImageView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            infoImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * 0.0323),
+            infoImageView.heightAnchor.constraint(equalToConstant: UIScreen.main.bounds.height * CustomAlertConstraints.infoImageViewHeightMultiplier),
             
-            messageLabel.topAnchor.constraint(equalTo: infoImageView.bottomAnchor, constant: 10),
-            messageLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            messageLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
+            messageLabel.topAnchor.constraint(equalTo: infoImageView.bottomAnchor, constant: CustomAlertConstraints.messageLabelTop),
+            messageLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: CustomAlertConstraints.messageLabelHorizontalPadding),
+            messageLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -CustomAlertConstraints.messageLabelHorizontalPadding),
             
-            cancelButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 20),
-            cancelButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-            cancelButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
-            cancelButton.heightAnchor.constraint(equalToConstant: 40),
-            cancelButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.27),
+            cancelButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: CustomAlertConstraints.buttonTop),
+            cancelButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: CustomAlertConstraints.messageLabelHorizontalPadding),
+            cancelButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: CustomAlertConstraints.buttonBottom),
+            cancelButton.heightAnchor.constraint(equalToConstant: CustomAlertConstraints.buttonHeight),
+            cancelButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * CustomAlertConstraints.buttonWidthMultiplier),
             
-            deleteButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: 20),
-            deleteButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-            deleteButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -20),
-            deleteButton.heightAnchor.constraint(equalToConstant: 40),
-            deleteButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * 0.27)
+            deleteButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor, constant: CustomAlertConstraints.buttonTop),
+            deleteButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -CustomAlertConstraints.messageLabelHorizontalPadding),
+            deleteButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: CustomAlertConstraints.buttonBottom),
+            deleteButton.heightAnchor.constraint(equalToConstant: CustomAlertConstraints.buttonHeight),
+            deleteButton.widthAnchor.constraint(equalToConstant: UIScreen.main.bounds.width * CustomAlertConstraints.buttonWidthMultiplier)
         ])
     }
     
